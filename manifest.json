@@ -1,0 +1,22 @@
+{
+  "name": "search-foxx",
+  "version": "1.0.0",
+  "description": "Chroma fuzzy search as Arango Foxx Service",
+  "author": "Chroma Dev Team",
+  "engines": {
+    "arangodb": "^3.0.0"
+  },
+
+  "main": "index.js",
+
+  "scripts": {
+    "setup": "scripts/setup.js",
+    "teardown": "scripts/teardown.js"
+  },
+
+  "files": {
+    "/": "files"
+  },
+
+  "lib": "."
+}

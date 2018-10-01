@@ -1,0 +1,19 @@
+{
+  "name": "chroma-search-foxx",
+  "version": "1.0.0",
+  "description": "An ArangoDB Foxx Demo Application ================================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy:install": "foxx install /v1 -u root -D chroma -p .auth",
+    "deploy": "foxx replace /v1 -u root -D chroma -p .auth"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fuzzyset.js": "0.0.7"
+  },
+  "devDependencies": {
+    "foxx-cli": "^1.2.0"
+  }
+}
