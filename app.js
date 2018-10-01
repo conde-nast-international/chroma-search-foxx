@@ -2,7 +2,7 @@
 'use strict';
 const arangodb = require("@arangodb");
 const joi = require('joi');
-const {uniqBy, flatten, deburr} = require('lodash');
+const {uniqBy, flatten, deburr, orderBy, find} = require('lodash');
 const createRouter = require("@arangodb/foxx/router");
 
 const db = arangodb.db;
@@ -48,13 +48,30 @@ function tokenize(str) {
   return tokens;
 }
 
-function indexString(str, doc) {
+function indexString(str, doc, distance=0) {
   const exists = fs.add(str) === false;
-  if(!exists) {
-    const docsOfTheString = docMap.get(str) || [];
-    docsOfTheString.push(doc._id);
+  let docs = docMap.get(str) || [];
+  const id = doc._id;
+  if (!find(docs, { id })) {
+    docs.push({
+      id,
+      distance
+    });
+    // small distance is a better match
+    docs = orderBy(docs, 'distance', 'asc');
     // create reverse mapping and add it to index
-    docMap.set(str, docsOfTheString);
+    docMap.set(str, docs);
+  }
+}
+
+// Index all possible prefixes of this string
+function indexStringAndPrefixes(str, doc, distance=0) {
+  let length = str.length;
+  indexString(str, doc, distance);
+  const MIN_CHAR_MATCH = 3;
+  for (let i = MIN_CHAR_MATCH; i < length; i++) {
+    const charDistance = length - i;
+    indexString(str.substr(0, i), doc, charDistance * .1 + distance);
   }
 }
 
@@ -67,18 +84,25 @@ function createCollectionIndex(collectionName, key) {
     }
 
     // index both the whole string and tokens
-    indexString(val, doc);
-    tokenize(val).forEach(str => {
-      indexString(str, doc);
-      indexString(deburr(str), doc);
-    });
+    indexStringAndPrefixes(val, doc);
+    const tokens = tokenize(val);
+    if (tokens.length > 1) {
+      tokens.forEach((str, i) => {
+        const distance = i+1;
+        indexStringAndPrefixes(str, doc, distance);
+        const deburred = deburr(str);
+        if (deburred !== str) {
+          indexStringAndPrefixes(deburr(str), doc, distance + .5);
+        }
+      });
+    }
   });
 }
 
 function retrieveDocsFromString(str) {
   const ids = docMap.get(str);
   console.assert(ids && ids.length, `should have found at least one doc for string: ${str}`);
-  return ids.map(id => {
+  return ids.map(({ id }) => {
     const [collectionName, key] = id.split('/');
     const collection = db._collection(collectionName);
     return collection.document(key);
