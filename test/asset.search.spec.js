@@ -72,7 +72,7 @@ console.log('phrase search "properties.brand" field', query(`
     RETURN asset._id
   `).toArray());
 
-// it doesn't works
+// this doesn't works
 console.log('phrase search "properties.year" field', query(`
     FOR asset IN AssetsSearchView
     SEARCH asset.properties.year == 2018
