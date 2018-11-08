@@ -111,7 +111,7 @@ function retrieveDocsFromString(str) {
 
 createCollectionIndex('brands', 'name');
 
-router.get('/search', function (req, res) {
+router.get('/fuzzy', function (req, res) {
   const start = Date.now();
   const query = req.queryParams.q;
   const matches = fs.get(query, [], .7);
