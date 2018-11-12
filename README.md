@@ -10,6 +10,18 @@ npm run deploy:install
 # For deployment updates
 npm run deploy 
 ```   
+
+## Indexer for ElasticSearch
+A set of APIs to synchronizing documents changes between Arango and ElasticSearch, it use a poll-to-update model using Arango [write ahead logs](https://docs.arangodb.com/3.4/Manual/Architecture/WriteAheadLog.html) as the source of truth for data changes, currently it updates the `assets` index only. All data changes persists to `chroma` db will be monitored, those changes that affect asset data will be updating the ElasticSearch index.  
+
+Various options on how the indexer works can be tuned in [Web Console](https://docs.arangodb.com/2.8/WebInterface/#services-tab)    
+
+ - `/es/index/all` Index all **tagged assets** on ElasticSearch
+   * The ElasticSearch endpoint is configurable through the `elasticsearch_host` option. 
+ - `/es/index/start` Enqueue a job to keep syncing changes related to assets to ElasticSearch.
+   * The indexing interval is configurable through the `elasticsearch_index_interval` option.   
+   * The indexing job retried times is configurable through the `elasticsearch_index_max_fails` option.   
+
 ## Brand Fuzzy Search
 The `/fuzzy` endpoint provides a rather simple full-text fuzzy search to Chroma taxonomy collections 
 

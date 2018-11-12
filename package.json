@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fuzzyset.js": "0.0.7"
+    "fuzzyset.js": "0.0.7",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "foxx-cli": "^1.2.0"

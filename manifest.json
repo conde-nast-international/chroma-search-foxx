@@ -11,9 +11,31 @@
 
   "scripts": {
     "setup": "scripts/setup.js",
-    "teardown": "scripts/teardown.js"
+    "teardown": "scripts/teardown.js",
+    "sync-index": "elasticsearch/index.task.js"
   },
-
+  "configuration": {
+    "arangodb_credentials": {
+      "description": "Credentials to speak with Arango HTTP endpoints ",
+      "default": "root:root",
+      "type": "string"
+    },
+    "elasticsearch_host": {
+      "description": "Configurations related to ElasticSearch",
+      "default": "http://elasticsearch:9200",
+      "type": "string"
+    },
+    "elasticsearch_index_interval": {
+      "description": "Interval between two index job",
+      "default": 5e3,
+      "type": "number"
+    },
+    "elasticsearch_index_max_fails": {
+      "description": "Maximum failures of indexing job",
+      "default": 10,
+      "type": "number"
+    }
+  },
   "files": {
     "/": "files"
   },
