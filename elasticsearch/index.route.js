@@ -37,7 +37,7 @@ const getIntialOps = () => {
 };
 
 const handleIndexJobSuccess = ({ to, ops }) => {
-  console.info(`index succeed with tick:${to}`);
+  console.info(`${ops.length} ops index succeed on tick:${to}`);
   ops.forEach(op => console.debug(op));
 };
 
