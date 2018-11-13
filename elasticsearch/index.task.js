@@ -183,10 +183,15 @@ const getTailLogs = from => {
   };
 };
 
+// _name ends up a system collection
+const collection_name = `_${module.context.collectionName("_es_indexer")}`;
 const getTickCollection = () => {
-  let esIndexCol = module.context.collection("es-index");
+  let esIndexCol = db._collection(collection_name);
   if (!esIndexCol) {
-    esIndexCol = db._create(module.context.collectionName("es-index"));
+    esIndexCol = db._create(collection_name, {
+      isSystem: true
+    });
+    console.log('created sys collection:', collection_name);
   }
   return esIndexCol;
 };
