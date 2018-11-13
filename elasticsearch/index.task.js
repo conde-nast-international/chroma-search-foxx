@@ -72,8 +72,23 @@ const logs2ops = logs => {
               return ids.map(id => ({ type: OP_INSERT_REPLACE, id }));
             }
 
-            // TODO: when we see removal from "has_tag" collection
-            // we don't know which was it "from"
+            // Unfortunately we can't do anything with the deletion from "has_tags" collection,
+            // since we can't know what were the vertexes on the removal log of an edge
+            /*
+              {
+                "tick": "5208604",
+                "type": 2302,
+                "tid": "0",
+                "database": "115",
+                "cid": "5178797",
+                "cname": "has_tags",
+                "data": {
+                  "_key": "5133773",
+                  "_rev": "_Xu1yBMm--_",
+                  "_id": "has_tags/5133773"
+                }
+              }
+             */
             return [];
 
           case "people":
