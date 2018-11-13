@@ -183,7 +183,7 @@ const getTailLogs = from => {
   };
 };
 
-// _name ends up a system collection
+// sys collection needs to end up with _
 const collection_name = `_${module.context.collectionName("_es_indexer")}`;
 const getTickCollection = () => {
   let esIndexCol = db._collection(collection_name);
